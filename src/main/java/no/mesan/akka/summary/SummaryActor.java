@@ -11,18 +11,19 @@ import akka.japi.pf.ReceiveBuilder;
 public class SummaryActor extends AbstractActor {
     public SummaryActor() {
         receive(ReceiveBuilder
-                        .match(ParsePage.class, this::spawnGetHtmlActor)
-                        .match(HTMLReceived.class, this::findSummary)
+                        .match(ParsePage.class, this::findSummary)
+                        .match(SummaryHtml.class, this::parseSummary)
                         .matchAny(this::unhandled).build()
         );
     }
 
-    private void spawnGetHtmlActor(final ParsePage pageParse) {
-        final ActorRef htmlActor = context().actorOf(Props.create(GetHtmlActor.class));
+    private void findSummary(final ParsePage pageParse) {
+        final ActorRef htmlActor = context().actorOf(Props.create(GetSummaryAsHtml.class));
         htmlActor.tell(pageParse, context().self());
     }
 
-    private void findSummary(final HTMLReceived htmlReceived) {
+    private void parseSummary(final SummaryHtml htmlReceived) {
+        // her skal du starte min gode venn Daniel <3
         System.out.println(htmlReceived.getHtml());
     }
 }

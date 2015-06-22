@@ -7,8 +7,8 @@ import akka.japi.pf.ReceiveBuilder;
 /**
  * @author Knut Esten Melandsø Nekså
  */
-public class GetHtmlActor extends AbstractActor {
-    public GetHtmlActor() {
+public class GetSummaryAsHtml extends AbstractActor {
+    public GetSummaryAsHtml() {
         receive(ReceiveBuilder
                         .match(ParsePage.class, this::getHtml)
                         .matchAny(this::unhandled).build()
@@ -16,6 +16,6 @@ public class GetHtmlActor extends AbstractActor {
     }
 
     private void getHtml(final ParsePage parsePage) {
-        sender().tell(new HTMLReceived("hei"), ActorRef.noSender());
+        sender().tell(new SummaryHtml(null), ActorRef.noSender());
     }
 }
