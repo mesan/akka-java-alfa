@@ -1,10 +1,13 @@
 package no.mesan.akka.linkFinder;
 
 import akka.actor.AbstractActor;
+import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
 import no.mesan.akka.WikipediaScanRequest;
+import no.mesan.akka.actors.FoundImage;
+import no.mesan.akka.actors.ImageHandler;
 import org.jsoup.Jsoup;
 import java.util.stream.Collectors;
 import java.io.IOException;
@@ -22,13 +25,16 @@ public class LinkFinder extends AbstractActor {
     }
 
     private void handleSourceRequest(WikipediaScanRequest wikipediaScanRequest) throws IOException {
-        System.out.println(Jsoup.connect(wikipediaScanRequest.getUrl())
+        log.debug("Finding links");
+        Jsoup.connect(wikipediaScanRequest.getUrl())
                 .timeout(10000)
                 .get()
                 .select("a[href]")
                 .stream()
-                .map((image) -> image.attr("abs:href"))
-                .collect(Collectors.joining("\n")));
+                .map((url) -> url.attr("abs:href"))
+                .map(Link::new)
+                .forEach((foundLink) -> context().actorOf(Props.create(LinkHandler.class))
+                        .tell(foundLink, context().self()));
     }
 
 }
