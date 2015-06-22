@@ -17,6 +17,6 @@ public class SummaryActorTest extends TestCase {
     public void findSummary() {
         final ActorSystem actorSystem = ActorSystem.create("summary");
         final ActorRef master = actorSystem.actorOf(Props.create(SummaryActor.class), "master");
-        master.tell("https://en.wikipedia.org/wiki/Akka_(toolkit)", ActorRef.noSender());
+        master.tell(new ParsePage("https://en.wikipedia.org/wiki/Akka_(toolkit)"), ActorRef.noSender());
     }
 }
