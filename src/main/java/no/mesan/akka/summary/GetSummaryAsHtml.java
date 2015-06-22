@@ -3,6 +3,10 @@ package no.mesan.akka.summary;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.japi.pf.ReceiveBuilder;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+
+import java.io.IOException;
 
 /**
  * @author Knut Esten Melandsø Nekså
@@ -15,7 +19,12 @@ public class GetSummaryAsHtml extends AbstractActor {
         );
     }
 
-    private void getHtml(final ParsePage parsePage) {
-        sender().tell(new SummaryHtml(null), ActorRef.noSender());
+    private void getHtml(final ParsePage parsePage) throws IOException {
+        final Element summary = Jsoup.connect(parsePage.getUrl())
+                .timeout(10_000)
+                .get()
+                .select("p")
+                .first();
+        sender().tell(new SummaryHtml(summary), ActorRef.noSender());
     }
 }
