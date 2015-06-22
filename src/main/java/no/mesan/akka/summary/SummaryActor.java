@@ -1,4 +1,4 @@
-package no.mesan.akka;
+package no.mesan.akka.summary;
 
 import akka.actor.AbstractActor;
 import akka.japi.pf.ReceiveBuilder;
@@ -15,6 +15,7 @@ public class SummaryActor extends AbstractActor {
     }
 
     private void findSummary(final String url) {
+
         System.out.println(url);
     }
 }

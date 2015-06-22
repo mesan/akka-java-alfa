@@ -1,4 +1,4 @@
-package no.mesan.akka;
+package no.mesan.akka.summary;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
