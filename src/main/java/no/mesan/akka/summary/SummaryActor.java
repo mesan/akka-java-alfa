@@ -1,6 +1,8 @@
 package no.mesan.akka.summary;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
 
 /**
@@ -9,13 +11,18 @@ import akka.japi.pf.ReceiveBuilder;
 public class SummaryActor extends AbstractActor {
     public SummaryActor() {
         receive(ReceiveBuilder
-                        .match(String.class, this::findSummary)
+                        .match(ParsePage.class, this::spawnGetHtmlActor)
+                        .match(HTMLReceived.class, this::findSummary)
                         .matchAny(this::unhandled).build()
         );
     }
 
-    private void findSummary(final String url) {
+    private void spawnGetHtmlActor(final ParsePage pageParse) {
+        final ActorRef htmlActor = context().actorOf(Props.create(GetHtmlActor.class));
+        htmlActor.tell(pageParse, context().self());
+    }
 
-        System.out.println(url);
+    private void findSummary(final HTMLReceived htmlReceived) {
+        System.out.println(htmlReceived.getHtml());
     }
 }
