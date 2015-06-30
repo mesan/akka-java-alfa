@@ -1,15 +1,14 @@
 package no.mesan.akka.summary;
 
+import no.mesan.akka.actors.ActorMessage;
 import org.jsoup.nodes.Element;
 
-public class SummaryHtml {
-    private final Element html;
-
+public class SummaryHtml extends ActorMessage<Element> {
     public SummaryHtml(Element html) {
-        this.html = html;
+        super(html);
     }
 
     public Element getHtml() {
-        return html;
+        return getContents();
     }
 }

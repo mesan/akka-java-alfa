@@ -1,14 +1,11 @@
 package no.mesan.akka.actors;
 
-public class FoundImage {
-
-    private final String imageUrl;
-
+public class FoundImage extends ActorMessage<String> {
     public FoundImage(final String imageUrl) {
-        this.imageUrl = imageUrl;
+        super(imageUrl);
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return getContents();
     }
 }

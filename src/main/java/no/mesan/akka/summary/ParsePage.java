@@ -1,13 +1,13 @@
 package no.mesan.akka.summary;
 
-public class ParsePage {
-    private final String url;
+import no.mesan.akka.actors.ActorMessage;
 
+public class ParsePage extends ActorMessage<String> {
     public ParsePage(String url) {
-        this.url = url;
+        super(url);
     }
 
     public String getUrl() {
-        return url;
+        return getContents();
     }
 }

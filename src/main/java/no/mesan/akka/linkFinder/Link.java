@@ -1,13 +1,14 @@
 package no.mesan.akka.linkFinder;
 
-public class Link {
-    private final String url;
+import no.mesan.akka.actors.ActorMessage;
+
+public class Link extends ActorMessage<String> {
 
     public Link(final String url) {
-        this.url = url;
+        super(url);
     }
 
     public String getUrl() {
-        return url;
+        return getContents();
     }
 }
