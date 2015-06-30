@@ -5,9 +5,6 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
 
-/**
- * @author Knut Esten Melandsø Nekså
- */
 public class SummaryActor extends AbstractActor {
     public SummaryActor() {
         receive(ReceiveBuilder

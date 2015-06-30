@@ -1,8 +1,5 @@
 package no.mesan.akka.summary;
 
-/**
- * @author Knut Esten Melandsø Nekså
- */
 public class ParsePage {
     private final String url;
 

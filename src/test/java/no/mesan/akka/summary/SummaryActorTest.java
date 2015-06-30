@@ -3,11 +3,7 @@ package no.mesan.akka.summary;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-import junit.framework.TestCase;
 
-/**
- * @author Knut Esten Melandsø Nekså
- */
 public class SummaryActorTest {
 
     public static void main(final String[] args) {

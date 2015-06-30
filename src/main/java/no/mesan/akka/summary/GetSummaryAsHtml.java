@@ -8,9 +8,6 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
-/**
- * @author Knut Esten Melandsø Nekså
- */
 public class GetSummaryAsHtml extends AbstractActor {
     public GetSummaryAsHtml() {
         receive(ReceiveBuilder

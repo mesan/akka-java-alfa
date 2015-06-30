@@ -6,15 +6,10 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
 import no.mesan.akka.WikipediaScanRequest;
-import no.mesan.akka.actors.FoundImage;
-import no.mesan.akka.actors.ImageHandler;
 import org.jsoup.Jsoup;
-import java.util.stream.Collectors;
+
 import java.io.IOException;
 
-/**
- * Created by arnfinng on 22/06/2015.
- */
 public class LinkFinder extends AbstractActor {
     LoggingAdapter log = Logging.getLogger(getContext().system(), this);
     public LinkFinder() {

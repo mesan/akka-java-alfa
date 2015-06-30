@@ -2,9 +2,6 @@ package no.mesan.akka.summary;
 
 import org.jsoup.nodes.Element;
 
-/**
- * @author Knut Esten Melandsø Nekså
- */
 public class SummaryHtml {
     private final Element html;
 
