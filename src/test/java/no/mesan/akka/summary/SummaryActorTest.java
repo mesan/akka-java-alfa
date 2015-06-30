@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 /**
  * @author Knut Esten Melandsø Nekså
  */
-public class SummaryActorTest extends TestCase {
+public class SummaryActorTest {
 
     public static void main(final String[] args) {
         new SummaryActorTest().findSummary();
