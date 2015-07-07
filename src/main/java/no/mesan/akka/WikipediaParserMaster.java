@@ -6,8 +6,7 @@ import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
 import no.mesan.akka.actors.ImageFinder;
 import no.mesan.akka.linkFinder.LinkFinder;
-import no.mesan.akka.summary.ParsePage;
-import no.mesan.akka.summary.SummaryActor;
+import no.mesan.akka.summary.SummaryFinder;
 
 public class WikipediaParserMaster extends AbstractActor {
 
@@ -23,6 +22,6 @@ public class WikipediaParserMaster extends AbstractActor {
         final ActorRef self = context().self();
         context().actorOf(Props.create(ImageFinder.class)).tell(wikipediaScanRequest, self);
         context().actorOf(Props.create(LinkFinder.class)).tell(wikipediaScanRequest, self);
-        context().actorOf(Props.create(SummaryActor.class)).tell(new ParsePage(wikipediaScanRequest.getUrl()), self);
+        context().actorOf(Props.create(SummaryFinder.class)).tell(wikipediaScanRequest.getUrl(), self);
     }
 }
