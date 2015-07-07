@@ -13,6 +13,7 @@ public class ImageFinder extends AbstractActor {
     public ImageFinder() {
         receive(ReceiveBuilder
                         .match(WikipediaScanRequest.class, this::findImages)
+                        .match(HandledImage.class, this::processImageHandled)
                         .matchAny(this::unhandled)
                         .build()
         );
@@ -30,5 +31,9 @@ public class ImageFinder extends AbstractActor {
                 .forEach((foundImage) -> context().actorOf(Props.create(ImageHandler.class))
                         .tell(foundImage, context().self()));
 
+    }
+
+    private void processImageHandled(final HandledImage handledImage) {
+        System.out.println("Completed handling image " + handledImage.getContents());
     }
 }

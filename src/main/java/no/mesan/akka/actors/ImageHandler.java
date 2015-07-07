@@ -11,7 +11,8 @@ public class ImageHandler extends AbstractActor {
     }
 
     private void handleImage(final FoundImage foundImage) {
-        System.out.println(foundImage.getImageUrl());
+        System.out.println("found image " + foundImage.getImageUrl());
         System.out.println(this.self());
+        context().sender().tell(new HandledImage(foundImage.getImageUrl()), context().self());
     }
 }
