@@ -18,10 +18,10 @@ public class WikipediaParserMaster extends AbstractActor {
     }
 
     private void handleScanRequest(final WikipediaScanRequest wikipediaScanRequest) {
-        System.out.println("Starter scan av url: " + wikipediaScanRequest.getUrl());
+        System.out.println("Starter scan av url: " + wikipediaScanRequest.getContents());
         final ActorRef self = context().self();
         context().actorOf(Props.create(ImageFinder.class)).tell(wikipediaScanRequest, self);
         context().actorOf(Props.create(LinkFinder.class)).tell(wikipediaScanRequest, self);
-        context().actorOf(Props.create(SummaryFinder.class)).tell(wikipediaScanRequest.getUrl(), self);
+        context().actorOf(Props.create(SummaryFinder.class)).tell(wikipediaScanRequest, self);
     }
 }
