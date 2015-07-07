@@ -20,8 +20,8 @@ public class ImageFinder extends AbstractActor {
     }
 
     private void findImages(final WikipediaScanRequest wikipediaScanRequest) throws IOException {
-        System.out.println("url " + wikipediaScanRequest.getUrl());
-        Jsoup.connect(wikipediaScanRequest.getUrl())
+        System.out.println("url " + wikipediaScanRequest.getContents());
+        Jsoup.connect(wikipediaScanRequest.getContents())
                 .timeout(10000)
                 .get()
                 .select("img[src]")

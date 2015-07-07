@@ -7,7 +7,7 @@ public abstract class ActorMessage<T> {
         this.contents = contents;
     }
 
-    protected T getContents() {
+    public T getContents() {
         return contents;
     }
 }

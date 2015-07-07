@@ -1,14 +1,11 @@
 package no.mesan.akka;
 
-public class WikipediaScanRequest {
+import no.mesan.akka.actors.ActorMessage;
 
-    private final String url;
+public class WikipediaScanRequest extends ActorMessage<String> {
 
     public WikipediaScanRequest(final String url) {
-        this.url = url;
+        super(url);
     }
 
-    public String getUrl() {
-        return url;
-    }
 }

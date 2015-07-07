@@ -21,7 +21,7 @@ public class LinkFinder extends AbstractActor {
 
     private void handleSourceRequest(WikipediaScanRequest wikipediaScanRequest) throws IOException {
         log.debug("Finding links");
-        Jsoup.connect(wikipediaScanRequest.getUrl())
+        Jsoup.connect(wikipediaScanRequest.getContents())
                 .timeout(10000)
                 .get()
                 .select("a[href]")

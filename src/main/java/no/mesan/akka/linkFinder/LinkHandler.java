@@ -16,7 +16,7 @@ public class LinkHandler extends AbstractActor{
 
     private void handleLink(final Link foundLink) {
         WikipediaScanRequest request = new WikipediaScanRequest(foundLink.getUrl());
-        System.out.println(request.getUrl());
+        System.out.println(request.getContents());
        //Må fikse så bare wiki sider blir tatt med
        //Må ha liste over de vi har sett på? Eller?
        //Skal denne kalle master? hvordan blir det?
