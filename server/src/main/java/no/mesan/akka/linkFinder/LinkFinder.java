@@ -27,7 +27,9 @@ public class LinkFinder extends AbstractActor {
                 .select("a[href]")
                 .stream()
                 .map((url) -> url.attr("abs:href"))
-                .filter(url -> url.contains("Wikipedia"))
+                .filter(url -> url.contains("www.wikipedia"))
+                .filter(url -> !url.contains(wikipediaScanRequest.getUrl()))
+                .filter(url -> !url.contains("File:"))
                 .map(Link::new)
                 .forEach((foundLink) -> context().actorOf(Props.create(LinkHandler.class))
                         .tell(foundLink, context().self()));
