@@ -19,7 +19,7 @@ public class SummaryFinder extends AbstractActor {
     }
 
     private void findSummary(final WikipediaScanRequest scanRequest) throws IOException {
-        final Element summary = Jsoup.connect(scanRequest.getUrl())
+        final Element summary = Jsoup.connect(scanRequest.getContents())
                 .timeout(10_000)
                 .get()
                 .select("p")
