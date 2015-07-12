@@ -1,10 +1,7 @@
 package no.mesan.akka.summary;
 
 import akka.actor.AbstractActor;
-import akka.actor.ActorRef;
-import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
-import no.mesan.akka.WikipediaParserMaster;
 
 import java.io.IOException;
 
