@@ -6,6 +6,7 @@ import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
 import no.mesan.akka.actors.ImageFinder;
 import no.mesan.akka.common.RemoteWikipediaScanRequest;
+import no.mesan.akka.common.WikipediaArticleSummary;
 import no.mesan.akka.linkFinder.LinkFinder;
 import no.mesan.akka.summary.SummaryFinder;
 
@@ -29,5 +30,10 @@ public class WikipediaParserMaster extends AbstractActor {
 
     private void handleRemoteScanRequest(final RemoteWikipediaScanRequest remoteWikipediaScanRequest) {
         handleScanRequest(new WikipediaScanRequest(remoteWikipediaScanRequest.getUrl()));
+
+        WikipediaArticleSummary article = new WikipediaArticleSummary();
+        article.setTest("Hei og hå jeg er så glad!");
+
+        sender().tell(article, ActorRef.noSender());
     }
 }
