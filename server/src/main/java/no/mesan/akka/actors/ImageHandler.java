@@ -15,13 +15,7 @@ public class ImageHandler extends AbstractActor {
     }
 
     private void handleImage(final FoundImage foundImage) {
-        Image image = null;
-        try {
-            URL url = new URL(foundImage.getImageUrl());
-            image = ImageIO.read(url);
-        } catch (IOException e) {
-            throw new RuntimeException("Couldn't download", e);
-        }
-        context().sender().tell(image, context().self());
+
+        context().sender().tell(foundImage, context().self());
     }
 }

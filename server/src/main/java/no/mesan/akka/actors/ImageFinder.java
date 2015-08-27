@@ -14,28 +14,27 @@ public class ImageFinder extends AbstractActor {
     public ImageFinder() {
         receive(ReceiveBuilder
                         .match(WikipediaScanRequest.class, this::findImages)
-                        .match(Image.class, this::processImageHandled)
+                        .match(FoundImage.class, this::processImageHandled)
                         .matchAny(this::unhandled)
                         .build()
         );
     }
 
     private void findImages(final WikipediaScanRequest wikipediaScanRequest) throws IOException {
-        System.out.println("url " + wikipediaScanRequest.getContents());
-        Jsoup.connect(wikipediaScanRequest.getContents())
+        FoundImage foundImage = Jsoup.connect(wikipediaScanRequest.getContents())
                 .timeout(10000)
                 .get()
                 .select("img[src]")
                 .stream()
                 .map((image) -> image.attr("abs:src"))
-                .map(FoundImage::new)
-                .forEach((foundImage) -> context().actorOf(Props.create(ImageHandler.class))
-                        .tell(foundImage, context().self()));
+                .map(FoundImage::new).findFirst().orElse(null);
+//                .forEach((foundImage) -> context().actorOf(Props.create(ImageHandler.class))
+//                        .tell(foundImage, context().self()));
 
+        processImageHandled(foundImage);
     }
 
-    private void processImageHandled(final Image handledImage) {
-        //Should select bestImage?
-        context().sender().tell(handledImage, context().self());
+    private void processImageHandled(final FoundImage handledImage) {
+        context().parent().tell(handledImage, context().self());
     }
 }

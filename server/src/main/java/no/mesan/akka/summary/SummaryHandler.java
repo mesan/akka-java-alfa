@@ -16,11 +16,6 @@ public class SummaryHandler extends AbstractActor {
 
     private void parseHtmlToText(final SummaryAsHtml summaryAsHtml) throws IOException {
         SummaryAsText summary = new SummaryAsText(summaryAsHtml.getHtml().text());
-
-        //System.out.println(summary.getSummary());
-        // Send det et sted
-        context().sender().tell(summary, ActorRef.noSender());
-//        final ActorRef htmlActor = context().actorOf(Props.create(WikipediaParserMaster.class));
-//        htmlActor.tell(summary, ActorRef.noSender());
+        sender().tell(summary, ActorRef.noSender());
     }
 }

@@ -23,7 +23,7 @@ public class WikipediaParserActor extends AbstractActor {
     }
 
     private void handleResponse(WikipediaArticleSummary wikipediaArticleSummary) {
-        System.out.println(wikipediaArticleSummary.getSummary());
+        System.out.println(wikipediaArticleSummary.getLinkResults().size());
     }
 
     private void scan(RemoteWikipediaScanRequest wikipediaScanRequest) {

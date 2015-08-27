@@ -38,12 +38,11 @@ public class LinkFinder extends AbstractActor {
                     .actorOf(Props.create(WikipediaParserMaster.class))
                     .tell(new WikipediaScanRequest(foundLink.getUrl(), remainingDepth - 1), context().self());
         }else{
-            context().sender().tell(linkResults, ActorRef.noSender());
+           context().parent().tell(linkResults, ActorRef.noSender());
         }
     }
 
     private void handleSourceRequest(WikipediaScanRequest wikipediaScanRequest) throws IOException {
-        System.out.println(wikipediaScanRequest.getContents());
         remainingDepth = wikipediaScanRequest.getDepth();
         linkResults = new ArrayList<>();
         Jsoup.connect(wikipediaScanRequest.getContents())
@@ -61,6 +60,9 @@ public class LinkFinder extends AbstractActor {
                             .tell(foundLink, context().self());
                     numberOfLinks++;
                 });
-    }
 
+        if (numberOfLinks == 0) {
+            context().parent().tell(linkResults, ActorRef.noSender());
+        }
+    }
 }
