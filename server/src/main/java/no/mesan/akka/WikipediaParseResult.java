@@ -9,7 +9,8 @@ public class WikipediaParseResult {
     private String url;
     private String summary;
     private Image image;
-    private List<WikipediaParseResult> links;
+    private List<WikipediaParseResult> linkResults;
+
     public WikipediaParseResult(String url){
         this.url = url;
     }
@@ -44,11 +45,11 @@ public class WikipediaParseResult {
     public void setImage(Image image) {
         this.image = image;
     }
-    public void addLinkResults(WikipediaParseResult link) {
-        this.links.add(link);
-    }
 
     public boolean isDone(){
-        return image != null && !links.isEmpty() && summary != null;
+        return image != null && !linkResults.isEmpty() && summary != null;
+    }
+    public void setLinkResults(List<WikipediaParseResult> linkResults) {
+        this.linkResults = linkResults;
     }
 }

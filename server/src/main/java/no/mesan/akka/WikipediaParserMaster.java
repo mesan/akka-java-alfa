@@ -12,6 +12,7 @@ import no.mesan.akka.summary.SummaryAsText;
 import no.mesan.akka.summary.SummaryFinder;
 
 import java.awt.*;
+import java.util.List;
 public class WikipediaParserMaster extends AbstractActor {
     private WikipediaParseResult result;
     public WikipediaParserMaster() {
@@ -19,7 +20,7 @@ public class WikipediaParserMaster extends AbstractActor {
                         .match(WikipediaScanRequest.class, this::handleScanRequest)
                         .match(RemoteWikipediaScanRequest.class, this::handleRemoteScanRequest)
                         .match(Image.class, this::addImage)
-                        .match(WikipediaParseResult.class, this::addLinkResult)
+                        .match(List.class, this::addLinkResult)
                         .match(SummaryAsText.class, this::addSummaryText)
                         .matchAny(this::unhandled).build()
         );
@@ -27,12 +28,14 @@ public class WikipediaParserMaster extends AbstractActor {
     private void addSummaryText(SummaryAsText summaryAsText) {
         result.setSummary(summaryAsText.getContents());
     }
-    private void addLinkResult(WikipediaParseResult wikipediaParseResult) {
-        //result.setLinkResults()
+    private void addLinkResult(List<WikipediaParseResult> wikipediaParseResult) {
+        result.setLinkResults(wikipediaParseResult);
     }
 
     private void addImage(Image image) {
-
+        result.setImage(image);
+        if(result.isDone())
+            self().tell(result, self());
     }
     private void handleScanRequest(final WikipediaScanRequest wikipediaScanRequest) {
         result = new WikipediaParseResult(wikipediaScanRequest.getContents());
