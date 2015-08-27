@@ -7,10 +7,17 @@ import java.io.File;
 
 public final class ImageToAsciiConverter {
 
+    public static final String ASCII_GRADIENT = "@@@@@##888&&&ooo**::...   ";
+
     public static String convert(BufferedImage image) {
-        double aspectratio = (double) image.getHeight() / (double) image.getWidth();
-        int scaledWidth = 80;
-        int scaledHeight = (int) (scaledWidth * aspectratio * 0.5);
+        return convert(image, 80, false);
+    }
+
+    public static String convert(BufferedImage image, int width, boolean invert) {
+        double aspectRatio = (double) image.getHeight() / (double) image.getWidth();
+
+        int scaledWidth = width;
+        int scaledHeight = (int) (scaledWidth * aspectRatio * 0.5); // Compensate for characters being about twice as high
 
         image = scaleImage(image, scaledWidth, scaledHeight);
 
@@ -21,38 +28,26 @@ public final class ImageToAsciiConverter {
             }
             for (int x = 0; x < image.getWidth(); x++) {
                 Color pixelColor = new Color(image.getRGB(x, y));
-                double greyscaleValue = (double) pixelColor.getRed() * 0.2216 + (double) pixelColor.getGreen() * 0.7152 + (double) pixelColor.getBlue() * 0.0722;
-                final char s = returnStrPos(greyscaleValue);
-                sb.append(s);
+                double greyscaleValue = colorToLuminance(pixelColor);
+                sb.append(grayscaleToCharacter(greyscaleValue, invert));
             }
         }
         return sb.toString();
     }
 
-    private static char returnStrPos(double greyscaleValue)
-    {
-        final char character;
+    private static double colorToLuminance(Color color) {
+        return ((double) color.getRed() * 0.2216 + (double) color.getGreen() * 0.7152 + (double) color.getBlue() * 0.0722) / 255.0;
+    }
 
-        if (greyscaleValue >= 230.0) {
-            character = ' ';
-        } else if (greyscaleValue >= 200.0) {
-            character = '.';
-        } else if (greyscaleValue >= 180.0) {
-            character = '*';
-        } else if (greyscaleValue >= 160.0) {
-            character = ':';
-        } else if (greyscaleValue >= 130.0) {
-            character = 'o';
-        } else if (greyscaleValue >= 100.0) {
-            character = '&';
-        } else if (greyscaleValue >= 70.0) {
-            character = '8';
-        } else if (greyscaleValue >= 50.0) {
-            character = '#';
-        } else {
-            character = '@';
+    private static char grayscaleToCharacter(double greyscaleValue, boolean invert)
+    {
+        String asciiGradient = ASCII_GRADIENT;
+        if (invert) {
+            asciiGradient = new StringBuilder(asciiGradient).reverse().toString();
         }
-        return character;
+        double valueScaledToGradient = greyscaleValue * (double)(asciiGradient.length() - 1);
+        int gradientIndex = (int) Math.round(valueScaledToGradient);
+        return asciiGradient.charAt(gradientIndex);
     }
 
     private static BufferedImage scaleImage(Image srcImg, int w, int h){
@@ -66,9 +61,16 @@ public final class ImageToAsciiConverter {
 
     public static void main(String[] args) {
         try {
-            BufferedImage image = ImageIO.read(new File("C:\\Users\\perl\\Downloads\\perl.png"));
-            final String ascii = ImageToAsciiConverter.convert(image);
-            System.out.println(ascii);
+            {
+                BufferedImage image = ImageIO.read(new File("C:\\Users\\perl\\Downloads\\gradient.jpg"));
+                final String ascii = ImageToAsciiConverter.convert(image);
+                System.out.println(ascii);
+            }
+            {
+                BufferedImage image = ImageIO.read(new File("C:\\Users\\perl\\Downloads\\perl.png"));
+                final String ascii = ImageToAsciiConverter.convert(image);
+                System.out.println(ascii);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
