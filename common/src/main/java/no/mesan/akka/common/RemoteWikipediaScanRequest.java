@@ -18,4 +18,8 @@ public class RemoteWikipediaScanRequest implements Serializable {
     public String getUrl() {
         return url;
     }
+
+    public int getDepth() {
+        return depth;
+    }
 }

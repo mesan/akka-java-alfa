@@ -54,7 +54,7 @@ public class WikipediaParserMaster extends AbstractActor {
         context().actorOf(Props.create(SummaryFinder.class)).tell(wikipediaScanRequest, self);
     }
 
-    private void handleRemoteScanRequest(final RemoteWikipediaScanRequest remoteWikipediaScanRequest) {
-        handleScanRequest(new WikipediaScanRequest(remoteWikipediaScanRequest.getUrl()));
+    private void handleRemoteScanRequest(final RemoteWikipediaScanRequest request) {
+        handleScanRequest(new WikipediaScanRequest(request.getUrl(), request.getDepth()));
     }
 }

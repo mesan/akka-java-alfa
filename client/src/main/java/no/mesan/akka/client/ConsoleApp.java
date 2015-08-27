@@ -31,7 +31,7 @@ public class ConsoleApp {
         System.out.println();
         
         final WikipediaParserClient wikipediaParserClient = new WikipediaParserClient();
-        final RemoteWikipediaScanRequest scanRequest = new RemoteWikipediaScanRequest(url);
+        final RemoteWikipediaScanRequest scanRequest = new RemoteWikipediaScanRequest(url, depth);
         System.out.println("Scanning...");
         System.out.println();
         System.out.println();
