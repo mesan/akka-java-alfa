@@ -6,6 +6,7 @@ import akka.japi.pf.ReceiveBuilder;
 import no.mesan.akka.WikipediaScanRequest;
 import org.jsoup.Jsoup;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class ImageFinder extends AbstractActor {
@@ -13,7 +14,7 @@ public class ImageFinder extends AbstractActor {
     public ImageFinder() {
         receive(ReceiveBuilder
                         .match(WikipediaScanRequest.class, this::findImages)
-                        .match(HandledImage.class, this::processImageHandled)
+                        .match(Image.class, this::processImageHandled)
                         .matchAny(this::unhandled)
                         .build()
         );
@@ -33,7 +34,8 @@ public class ImageFinder extends AbstractActor {
 
     }
 
-    private void processImageHandled(final HandledImage handledImage) {
-        System.out.println("Completed handling image " + handledImage.getContents());
+    private void processImageHandled(final Image handledImage) {
+        //Should select bestImage?
+        context().sender().tell(handledImage, context().self());
     }
 }

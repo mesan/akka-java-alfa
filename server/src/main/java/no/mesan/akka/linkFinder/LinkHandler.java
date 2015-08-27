@@ -2,11 +2,16 @@ package no.mesan.akka.linkFinder;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
+import akka.agent.Agent;
+import akka.dispatch.ExecutionContexts;
 import akka.japi.pf.ReceiveBuilder;
 import no.mesan.akka.WikipediaScanRequest;
+import scala.concurrent.ExecutionContext;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 public class LinkHandler extends AbstractActor{
-    int handledLinks;
+    public static int handledLinks;
     public LinkHandler() {
         receive(
                 ReceiveBuilder
@@ -17,10 +22,7 @@ public class LinkHandler extends AbstractActor{
 
     private void handleLink(final Link foundLink) {
         WikipediaScanRequest request = new WikipediaScanRequest(foundLink.getUrl());
-        System.out.println(request.getContents());
-       //Må fikse så bare wiki sider blir tatt med
-       //Må ha liste over de vi har sett på? Eller?
-       //Skal denne kalle master? hvordan blir det?
+        LinkHandler.handledLinks++;
         if(handledLinks < 100) {
             sender().tell(request, ActorRef.noSender());
         }
