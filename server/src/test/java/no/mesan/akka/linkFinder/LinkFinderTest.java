@@ -15,9 +15,7 @@ public class LinkFinderTest {
 
         final Props props = Props.create(LinkFinder.class);
         final ActorSystem system = ActorSystem.create();
-        TestActorRef<ImageFinder> testActorRef = TestActorRef.create(system, props, "ImageFinderTest");
+        TestActorRef<LinkFinder> testActorRef = TestActorRef.create(system, props, "LinkFinderTest");
         testActorRef.tell(scanRequest, ActorRef.noSender());
-        Thread.sleep(5000);
-        system.shutdown();
     }
 }

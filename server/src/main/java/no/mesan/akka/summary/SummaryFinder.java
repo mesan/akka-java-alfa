@@ -14,12 +14,13 @@ public class SummaryFinder extends AbstractActor {
     public SummaryFinder() {
         receive(ReceiveBuilder
                         .match(WikipediaScanRequest.class, this::findSummary)
+                        .match(SummaryAsText.class, this::finishedSummary)
                         .matchAny(this::unhandled).build()
         );
     }
 
     private void findSummary(final WikipediaScanRequest scanRequest) throws IOException {
-        final Element summary = Jsoup.connect(scanRequest.getContents())
+       final Element summary = Jsoup.connect(scanRequest.getContents())
                 .timeout(10_000)
                 .get()
                 .select("p")
@@ -27,5 +28,8 @@ public class SummaryFinder extends AbstractActor {
 
         final ActorRef htmlActor = context().actorOf(Props.create(SummaryHandler.class));
         htmlActor.tell(new SummaryAsHtml(summary), ActorRef.noSender());
+    }
+    private void finishedSummary(final SummaryAsText summary){
+        context().sender().tell(summary, ActorRef.noSender());
     }
 }

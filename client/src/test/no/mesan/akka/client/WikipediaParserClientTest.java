@@ -2,6 +2,7 @@ package no.mesan.akka.client;
 
 import no.mesan.akka.common.RemoteWikipediaScanRequest;
 
+
 public class WikipediaParserClientTest {
 
     private static final String wikipediaUrl = "https://en.wikipedia.org/wiki/Akka_(toolkit)";
