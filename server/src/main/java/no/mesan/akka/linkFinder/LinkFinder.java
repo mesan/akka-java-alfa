@@ -46,7 +46,7 @@ public class LinkFinder extends AbstractActor {
         System.out.println(wikipediaScanRequest.getContents());
         remainingDepth = wikipediaScanRequest.getDepth();
         linkResults = new ArrayList<>();
-        final Stream<Link> wikipedia = Jsoup.connect(wikipediaScanRequest.getContents())
+        Jsoup.connect(wikipediaScanRequest.getContents())
                 .timeout(10000)
                 .get()
                 .select("a[href]")
@@ -55,11 +55,12 @@ public class LinkFinder extends AbstractActor {
                 .filter(url -> url.contains("wikipedia"))
                 .filter(url -> !url.contains(wikipediaScanRequest.getContents()))
                 .filter(url -> !url.contains("File:"))
-                .map(Link::new);
-        numberOfLinks = (int) wikipedia.count();
-        wikipedia.forEach((foundLink) -> context ()
-                        .actorOf(Props.create(LinkHandler.class))
-                        .tell(foundLink, context().self()));
+                .map(Link::new).forEach((foundLink) -> {
+                    context ()
+                            .actorOf(Props.create(LinkHandler.class))
+                            .tell(foundLink, context().self());
+                    numberOfLinks++;
+                });
 
     }
 
