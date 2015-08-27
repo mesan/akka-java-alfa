@@ -4,7 +4,7 @@ import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
-import no.mesan.akka.WikipediaParseResult;
+import no.mesan.akka.common.WikipediaArticleSummary;
 import no.mesan.akka.WikipediaParserMaster;
 import no.mesan.akka.WikipediaScanRequest;
 import org.jsoup.Jsoup;
@@ -15,18 +15,18 @@ import java.util.List;
 import java.util.stream.Stream;
 public class LinkFinder extends AbstractActor {
     private int remainingDepth;
-    private List<WikipediaParseResult> linkResults;
+    private List<WikipediaArticleSummary> linkResults;
     private int numberOfLinks;
     public LinkFinder() {
         receive(ReceiveBuilder
                         .match(WikipediaScanRequest.class, this::handleSourceRequest)
                         .match(Link.class, this::handleFinishedLink)
-                        .match(WikipediaParseResult.class, this::handleFinishedRequest)
+                        .match(WikipediaArticleSummary.class, this::handleFinishedRequest)
                         .matchAny(this::unhandled).build()
         );
     }
-    private void handleFinishedRequest(WikipediaParseResult wikipediaParseResult) {
-        linkResults.add(wikipediaParseResult);
+    private void handleFinishedRequest(WikipediaArticleSummary wikipediaArticleSummary) {
+        linkResults.add(wikipediaArticleSummary);
         numberOfLinks --;
         if(numberOfLinks == 0){
             context().sender().tell(linkResults, ActorRef.noSender());
@@ -61,7 +61,6 @@ public class LinkFinder extends AbstractActor {
                             .tell(foundLink, context().self());
                     numberOfLinks++;
                 });
-
     }
 
 }

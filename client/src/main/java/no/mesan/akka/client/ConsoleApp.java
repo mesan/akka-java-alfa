@@ -29,13 +29,14 @@ public class ConsoleApp {
         System.out.format("Scanning %s with depth %d", url, depth);
         System.out.println();
         System.out.println();
-
+        
         final WikipediaParserClient wikipediaParserClient = new WikipediaParserClient();
         final RemoteWikipediaScanRequest scanRequest = new RemoteWikipediaScanRequest(url);
-        wikipediaParserClient.scan(scanRequest);
         System.out.println("Scanning...");
         System.out.println();
         System.out.println();
         System.out.println();
+
+        wikipediaParserClient.scan(scanRequest);
     }
 }

@@ -14,28 +14,28 @@ import no.mesan.akka.summary.SummaryFinder;
 import java.awt.*;
 import java.util.List;
 public class WikipediaParserMaster extends AbstractActor {
-    private WikipediaParseResult result;
+    private WikipediaArticleSummary result;
     public WikipediaParserMaster() {
         receive(ReceiveBuilder
                         .match(WikipediaScanRequest.class, this::handleScanRequest)
                         .match(RemoteWikipediaScanRequest.class, this::handleRemoteScanRequest)
                         .match(Image.class, this::addImage)
                         .match(SummaryAsText.class, this::addSummaryText)
+                        .match(WikipediaArticleSummary.class, this::sendResult)
                         .match(List.class, this::addLinkResult)
-                        .match(WikipediaParseResult.class, this::sendResult)
                         .matchAny(this::unhandled).build()
         );
     }
-    private void sendResult(WikipediaParseResult wikipediaParseResult) {
-        context().sender().tell(result, ActorRef.noSender());
+    private void sendResult(WikipediaArticleSummary wikipediaArticleSummary) {
+        sender().tell(result, ActorRef.noSender());
     }
     private void addSummaryText(SummaryAsText summaryAsText) {
         result.setSummary(summaryAsText.getContents());
         if(result.isDone())
             self().tell(result, self());
     }
-    private void addLinkResult(List<WikipediaParseResult> wikipediaParseResult) {
-        result.setLinkResults(wikipediaParseResult);
+    private void addLinkResult(List<WikipediaArticleSummary> wikipediaArticleSummary) {
+        result.setLinkResults(wikipediaArticleSummary);
         if(result.isDone())
             self().tell(result, self());
     }
@@ -46,7 +46,7 @@ public class WikipediaParserMaster extends AbstractActor {
             self().tell(result, self());
     }
     private void handleScanRequest(final WikipediaScanRequest wikipediaScanRequest) {
-        result = new WikipediaParseResult(wikipediaScanRequest.getContents());
+        result = new WikipediaArticleSummary(wikipediaScanRequest.getContents());
         System.out.println("Starter scan av url: " + wikipediaScanRequest.getContents());
         final ActorRef self = context().self();
         context().actorOf(Props.create(ImageFinder.class)).tell(wikipediaScanRequest, self);
@@ -56,10 +56,5 @@ public class WikipediaParserMaster extends AbstractActor {
 
     private void handleRemoteScanRequest(final RemoteWikipediaScanRequest remoteWikipediaScanRequest) {
         handleScanRequest(new WikipediaScanRequest(remoteWikipediaScanRequest.getUrl()));
-
-        WikipediaArticleSummary article = new WikipediaArticleSummary();
-        article.setTest("Hei og hå jeg er så glad!");
-
-        sender().tell(article, ActorRef.noSender());
     }
 }
