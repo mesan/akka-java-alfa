@@ -20,16 +20,24 @@ public class WikipediaParserMaster extends AbstractActor {
                         .match(WikipediaScanRequest.class, this::handleScanRequest)
                         .match(RemoteWikipediaScanRequest.class, this::handleRemoteScanRequest)
                         .match(Image.class, this::addImage)
-                        .match(List.class, this::addLinkResult)
                         .match(SummaryAsText.class, this::addSummaryText)
+                        .match(List.class, this::addLinkResult)
+                        .match(WikipediaParseResult.class, this::sendResult)
                         .matchAny(this::unhandled).build()
         );
     }
+    private void sendResult(WikipediaParseResult wikipediaParseResult) {
+        context().sender().tell(result, ActorRef.noSender());
+    }
     private void addSummaryText(SummaryAsText summaryAsText) {
         result.setSummary(summaryAsText.getContents());
+        if(result.isDone())
+            self().tell(result, self());
     }
     private void addLinkResult(List<WikipediaParseResult> wikipediaParseResult) {
         result.setLinkResults(wikipediaParseResult);
+        if(result.isDone())
+            self().tell(result, self());
     }
 
     private void addImage(Image image) {
