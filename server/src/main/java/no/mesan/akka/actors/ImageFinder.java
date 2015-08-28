@@ -21,17 +21,20 @@ public class ImageFinder extends AbstractActor {
     }
 
     private void findImages(final WikipediaScanRequest wikipediaScanRequest) throws IOException {
-        FoundImage foundImage = Jsoup.connect(wikipediaScanRequest.getContents())
-                .timeout(10000)
-                .get()
-                .select("img[src]")
-                .stream()
-                .map((image) -> image.attr("abs:src"))
-                .map(FoundImage::new).findFirst().orElse(null);
+        try {
+            FoundImage foundImage = Jsoup.connect(wikipediaScanRequest.getContents())
+                    .timeout(10000)
+                    .get()
+                    .select("img[src]")
+                    .stream()
+                    .map((image) -> image.attr("abs:src"))
+                    .map(FoundImage::new).findFirst().orElse(null);
 //                .forEach((foundImage) -> context().actorOf(Props.create(ImageHandler.class))
 //                        .tell(foundImage, context().self()));
-
-        processImageHandled(foundImage);
+            processImageHandled(foundImage);
+        }catch (Exception e){
+            context().parent().tell(new FoundImage("https://abakus.no/uploads/events/thumbs/2012-01-08-2047-Mesan%20logo-578x150.jpg"), context().self());
+        }
     }
 
     private void processImageHandled(final FoundImage handledImage) {

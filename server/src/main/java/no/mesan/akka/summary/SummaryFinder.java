@@ -20,16 +20,20 @@ public class SummaryFinder extends AbstractActor {
     }
 
     private void findSummary(final WikipediaScanRequest scanRequest) throws IOException {
-        final Element summary = Jsoup.connect(scanRequest.getContents())
-                .timeout(10_000)
-                .get()
-                .select("#mw-content-text")
-                .first()
-                .select("p")
-                .first();
+        try{
+            final Element summary = Jsoup.connect(scanRequest.getContents())
+                    .timeout(10_000)
+                    .get()
+                    .select("#mw-content-text")
+                    .select("p")
+                    .first();
+            final ActorRef htmlActor = context().actorOf(Props.create(SummaryHandler.class));
+            htmlActor.tell(new SummaryAsHtml(summary), self());
+        }
+        catch (Exception e){
+            context().parent().tell(new SummaryAsText("No summary"), ActorRef.noSender());
+        }
 
-        final ActorRef htmlActor = context().actorOf(Props.create(SummaryHandler.class));
-        htmlActor.tell(new SummaryAsHtml(summary), self());
     }
 
     private void finishedSummary(final SummaryAsText summary) {

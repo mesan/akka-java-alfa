@@ -24,10 +24,12 @@ public class WikipediaParserMaster extends AbstractActor {
                         .match(FoundImage.class, this::addImage)
                         .match(SummaryAsText.class, this::addSummaryText)
                         .match(List.class, this::addLinkResult)
-                        .matchAny(this::unhandled).build()
+                        .matchAny(this::showType).build()
         );
     }
-
+    private void showType(Object o) {
+        System.out.println(o.getClass());
+    }
     private void returnArticleIfDone() {
         if (result.getImage() != null && !result.getLinkResults().isEmpty() && result.getSummary() != null) {
             System.out.println("sending result for query on " + url);
@@ -51,7 +53,9 @@ public class WikipediaParserMaster extends AbstractActor {
     }
 
     private void handleScanRequest(final WikipediaScanRequest wikipediaScanRequest) {
-        System.out.println("Recieved new request to parse: " + wikipediaScanRequest.getContents());
+        System.out.println(
+                "Recieved new request to parse: " + wikipediaScanRequest.getContents()
+                + " to depth " + wikipediaScanRequest.getDepth());
         this.url = wikipediaScanRequest.getContents();
         result = new WikipediaArticleSummary(wikipediaScanRequest.getContents());
         context().actorOf(Props.create(ImageFinder.class)).tell(wikipediaScanRequest, self());
