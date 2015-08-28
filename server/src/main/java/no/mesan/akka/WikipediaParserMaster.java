@@ -6,14 +6,11 @@ import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
 import no.mesan.akka.actors.FoundImage;
 import no.mesan.akka.actors.ImageFinder;
-import no.mesan.akka.common.RemoteWikipediaScanRequest;
 import no.mesan.akka.common.WikipediaArticleSummary;
 import no.mesan.akka.linkFinder.LinkFinder;
 import no.mesan.akka.summary.SummaryAsText;
 import no.mesan.akka.summary.SummaryFinder;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 
 public class WikipediaParserMaster extends AbstractActor {
@@ -23,7 +20,6 @@ public class WikipediaParserMaster extends AbstractActor {
     public WikipediaParserMaster() {
         receive(ReceiveBuilder
                         .match(WikipediaScanRequest.class, this::handleScanRequest)
-                        .match(RemoteWikipediaScanRequest.class, this::handleRemoteScanRequest)
                         .match(FoundImage.class, this::addImage)
                         .match(SummaryAsText.class, this::addSummaryText)
                         .match(List.class, this::addLinkResult)
@@ -61,10 +57,6 @@ public class WikipediaParserMaster extends AbstractActor {
         context().actorOf(Props.create(ImageFinder.class)).tell(wikipediaScanRequest, self());
         context().actorOf(Props.create(LinkFinder.class)).tell(wikipediaScanRequest, self());
         context().actorOf(Props.create(SummaryFinder.class)).tell(wikipediaScanRequest, self());
-    }
-
-    private void handleRemoteScanRequest(final RemoteWikipediaScanRequest request) {
-        remoteCaller = sender();
-        handleScanRequest(new WikipediaScanRequest(request.getUrl(), request.getDepth()));
+        remoteCaller = wikipediaScanRequest.getRemoteCaller();
     }
 }

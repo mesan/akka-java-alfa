@@ -13,7 +13,7 @@ public class WikipediaParser {
                 "WikipediaParser",
                 ConfigFactory.load().getConfig("WikipediaParserConfig")
         );
-        actorSystem.actorOf(Props.create(WikipediaParserMaster.class), "WikipediaParserMaster");
+        actorSystem.actorOf(Props.create(WikipediaParserServer.class), "WikipediaParserServer");
     }
 }
 

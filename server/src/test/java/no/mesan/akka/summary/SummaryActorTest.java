@@ -14,6 +14,6 @@ public class SummaryActorTest {
     public void findSummary() {
         final ActorSystem actorSystem = ActorSystem.create("summary");
         final ActorRef master = actorSystem.actorOf(Props.create(SummaryFinder.class), "master");
-        master.tell(new WikipediaScanRequest("https://en.wikipedia.org/wiki/Akka_(toolkit)"), ActorRef.noSender());
+        master.tell(new WikipediaScanRequest("https://en.wikipedia.org/wiki/Akka_(toolkit)", ActorRef.noSender()), ActorRef.noSender());
     }
 }

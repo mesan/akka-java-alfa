@@ -14,7 +14,7 @@ public class WikipediaParserActor extends AbstractActor {
 
     public WikipediaParserActor() {
         remoteActor = context().actorFor(
-                "akka.tcp://WikipediaParser@127.0.0.1:2552/user/WikipediaParserMaster"
+                "akka.tcp://WikipediaParser@127.0.0.1:2552/user/WikipediaParserServer"
         );
         receive(ReceiveBuilder
                 .match(WikipediaArticleSummary.class, this::handleResponse)

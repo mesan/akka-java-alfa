@@ -17,7 +17,7 @@ public class LinkHandler extends AbstractActor {
     }
 
     private void handleLink(final Link foundLink) {
-        WikipediaScanRequest request = new WikipediaScanRequest(foundLink.getUrl());
+        WikipediaScanRequest request = new WikipediaScanRequest(foundLink.getUrl(), self());
         LinkHandler.handledLinks++;
         if (handledLinks < 100) {
             sender().tell(request, ActorRef.noSender());

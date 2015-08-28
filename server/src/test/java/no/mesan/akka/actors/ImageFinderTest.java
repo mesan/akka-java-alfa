@@ -10,7 +10,7 @@ public class ImageFinderTest {
 
     public static void main(String[] args) throws InterruptedException {
         final WikipediaScanRequest scanRequest =
-                new WikipediaScanRequest("https://en.wikipedia.org/wiki/Akka_(toolkit)");
+                new WikipediaScanRequest("https://en.wikipedia.org/wiki/Akka_(toolkit)", ActorRef.noSender());
 
         final Props props = Props.create(ImageFinder.class);
         final ActorSystem system = ActorSystem.create();
