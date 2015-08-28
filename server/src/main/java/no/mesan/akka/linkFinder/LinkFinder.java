@@ -32,6 +32,7 @@ public class LinkFinder extends AbstractActor {
         }
     }
     private void handleFinishedLink(Link foundLink) {
+        System.out.println(foundLink.getUrl());
         if(remainingDepth != 0) {
             context()
                     .actorOf(Props.create(WikipediaParserMaster.class))
@@ -57,6 +58,7 @@ public class LinkFinder extends AbstractActor {
                             .actorOf(Props.create(LinkHandler.class))
                             .tell(foundLink, context().self());
                     numberOfLinks++;
+                    System.out.println(numberOfLinks);
                 });
 
         if (numberOfLinks == 0) {
