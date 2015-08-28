@@ -15,7 +15,9 @@ public class SummaryHandler extends AbstractActor {
     }
 
     private void parseHtmlToText(final SummaryAsHtml summaryAsHtml) throws IOException {
-        SummaryAsText summary = new SummaryAsText(summaryAsHtml.getHtml().text());
+        SummaryAsText summary = new SummaryAsText("No summary");
+        if(summaryAsHtml !=null && summaryAsHtml.getHtml() != null)
+         summary= new SummaryAsText(summaryAsHtml.getHtml().text());
         sender().tell(summary, ActorRef.noSender());
     }
 }
